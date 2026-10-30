@@ -1,0 +1,35 @@
+# Projet 001 : Générateur de QR Code de Site Web
+
+## Introduction
+Ce projet a pour objectif de créer une application web simple avec **Node.js** et le framework **Express**. L'application permet à un utilisateur de saisir l'URL d'un site web dans un formulaire, de traiter cette information à l'aide d'un middleware, et de générer instantanément le QR code correspondant affiché à l'écran.
+
+## Ce que nous avons fait (Explication du code)
+
+Dans notre fichier principal `serveur.js`, nous avons procédé étape par étape :
+
+1. **Importation des modules** :
+   - On importe `express` pour créer notre serveur web et gérer les routes.
+   - On importe `qrcode` pour transformer n'importe quelle chaîne de caractères (ici, une URL) en une image de QR code.
+
+2. **Configuration du serveur et du Middleware** :
+   - On initialise Express avec `const app = express()`.
+   - On utilise `app.use(express.urlencoded({ extended: true }))` pour permettre au serveur de récupérer proprement les données envoyées par le formulaire HTML (`req.body`).
+   - On a créé un **middleware personnalisé** (`monMiddleware`). C'est une fonction qui s'exécute à chaque fois qu'une requête arrive sur le serveur. Elle intercepte la requête, affiche un message dans la console (avec la méthode HTTP et l'URL ciblée), puis utilise `next()` pour laisser la requête continuer vers la route correspondante.
+
+3. **La route `GET /` (Affichage du formulaire)** :
+   - Lorsque l'utilisateur va sur la page d'accueil (`http://localhost:3000`), le serveur lui renvoie directement un formulaire HTML simple avec un champ de saisie (`input`) pour l'URL du site et un bouton "Générer".
+
+4. **La route `POST /generer` (Traitement et génération)** :
+   - Quand l'utilisateur clique sur le bouton, le formulaire envoie l'URL en méthode `POST`.
+   - La route récupère l'adresse saisie (`req.body.url`).
+   - Elle utilise la fonction asynchrone `qrcode.toDataURL(siteUrl)` pour générer l'image.
+   - Enfin, elle renvoie une réponse HTML qui affiche l'image du QR code généré.
+
+5. **Le démarrage du serveur** :
+   - Le serveur écoute sur le port `3000` (`app.listen(3000)`).
+
+## Comment lancer le projet
+
+1. Installer les dépendances nécessaires :
+   ```bash
+   npm install express qrcode
